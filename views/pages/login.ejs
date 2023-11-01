@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head'); -%>
+<body>
+<div class="wrapper">
+
+    <div class="container" style="margin-top: 2em;">
+        <%- include('../partials/header'); -%>
+    </div>
+    <form method="post" action="/api/auth/login" class="login-form">
+        <label>Email:
+            <input type="email" placeholder="email" name="email">
+        </label>
+        <label>Pssword:<input type="password" placeholder="password" name="password"></label>
+        <input type="submit">
+    </form>
+    <%- include('../partials/footer'); -%>
+</div>
+<%- include('../partials/bottom-scripts'); -%>
+</body>
+</html>
