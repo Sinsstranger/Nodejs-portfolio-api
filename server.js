@@ -34,14 +34,6 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/reviews', reviewsRoutes);
 app.use('/api/auth', authRoutes);
 
-app.post(
-	'/login',
-	passport.authenticate('local', {
-		successRedirect: '/',
-		failureRedirect: '/login',
-	})
-);
-
 app.get('/', (req, res) => {
 	res.render('pages/index');
 });
