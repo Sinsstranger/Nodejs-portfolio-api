@@ -11,3 +11,4 @@
 #.pnp.*
 .vscode/
 .idea/
+node_modules/
