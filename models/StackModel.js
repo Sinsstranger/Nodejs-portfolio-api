@@ -1,5 +1,5 @@
 // Подключаем mongoose
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 // Определяем схему для стека технологий
 const stackSchema = new mongoose.Schema({
@@ -12,10 +12,10 @@ const stackSchema = new mongoose.Schema({
 		required: true, // Обязательное поле
 		validate: {
 			// Пользовательский валидатор для проверки формата изображения
-			validator: function (v) {
+			validator(v) {
 				return /\.(jpe?g|png|gif|webp|svg)$/.test(v);
 			},
-			message: "Неверный формат изображения",
+			message: 'Неверный формат изображения',
 		},
 	},
 	description: {
@@ -28,20 +28,20 @@ const stackSchema = new mongoose.Schema({
 		type: String,
 		validate: {
 			// Пользовательский валидатор для проверки формата ссылки
-			validator: function (v) {
-				return /^https?:\/\/[\w-\.]+(\.[\w-]+)+\/?/.test(v);
+			validator(v) {
+				return /^https?:\/\/[\w-.]+(\.[\w-]+)+\/?/.test(v);
 			},
-			message: "Неверный формат ссылки",
+			message: 'Неверный формат ссылки',
 		},
 	},
 	isUsuallyUsed: {
 		type: Boolean,
 		required: false, // Не обязательное поле
-	}
+	},
 });
 
 // Создаем модель для стека технологий на основе схемы
-const StackModel = mongoose.model("StackModel", stackSchema);
+const StackModel = mongoose.model('StackModel', stackSchema);
 
 // Экспортируем модель
 module.exports = StackModel;

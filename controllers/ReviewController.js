@@ -1,4 +1,5 @@
-const ReviewModel = require("../models/ReviewModel");
+const ReviewModel = require('../models/ReviewModel');
+
 const reviewController = {
 	// Контроллер для получения списка всех отзывов
 	getAll: async (req, res) => {
@@ -9,7 +10,7 @@ const reviewController = {
 			res.json(reviews);
 		} catch (err) {
 			// Обрабатываем ошибку и отправляем статус 500
-			console.error(err);
+			// console.error(err)
 			res.status(500).send('Server error');
 		}
 	},
@@ -17,7 +18,7 @@ const reviewController = {
 	getById: async (req, res) => {
 		try {
 			// Получаем ID из параметров запроса
-			const id = req.params.id;
+			const { id } = req.params;
 			// Ищем отзыв по ID в базе данных
 			const review = await ReviewModel.findById(id);
 			// Проверяем, что отзыв существует
@@ -26,18 +27,18 @@ const reviewController = {
 				return res.status(404).send('Review not found');
 			}
 			// Отправляем ответ с объектом отзыва
-			res.json(review);
+			return res.json(review);
 		} catch (err) {
 			// Обрабатываем ошибку и отправляем статус 500
-			console.error(err);
-			res.status(500).send('Server error');
+			// console.error(err)
+			return res.status(500).send('Server error');
 		}
 	},
 	// Контроллер для создания нового отзыва
 	create: async (req, res) => {
 		try {
 			// Получаем данные из тела запроса
-			const {author, title, description} = req.body;
+			const { author, title, description } = req.body;
 			// Проверяем, что все обязательные поля заполнены
 			if (!author || !title || !description) {
 				// Если нет, отправляем статус 400 и сообщение
@@ -47,38 +48,36 @@ const reviewController = {
 			const review = new ReviewModel({
 				author,
 				title,
-				description
+				description,
 			});
 			// Сохраняем объект в базе данных
 			await review.save();
 			// Отправляем ответ со статусом 201 и объектом отзыва
-			res.status(201).json(review);
+			return res.status(201).json(review);
 		} catch (err) {
 			// Обрабатываем ошибку и отправляем статус 500
-			console.error(err);
-			res.status(500).send("Server error");
+			// console.error(err)
+			return res.status(500).send('Server error');
 		}
 	},
 	// Контроллер для обновления существующей технологии по ID
 	update: async (req, res) => {
 		try {
 			// Получаем ID из параметров запроса
-			const id = req.params.id;
+			const { id } = req.params;
 			// Получаем данные из тела запроса
-			const {author, title, description} = req.body;
+			const { author, title, description } = req.body;
 			// Проверяем, что хотя бы одно поле заполнено
 			if (!author && !title && !description) {
 				// Если нет, отправляем статус 400 и сообщение
-				return res
-					.status(400)
-					.send("Please provide at least one field to update");
+				return res.status(400).send('Please provide at least one field to update');
 			}
 			// Ищем отзыв по ID в базе данных
 			const review = await ReviewModel.findById(id);
 			// Проверяем, что отзыв существует
 			if (!review) {
 				// Если нет, отправляем статус 404 и сообщение
-				return res.status(404).send("Review not found");
+				return res.status(404).send('Review not found');
 			}
 			// Обновляем поля отзыва, если они переданы в запросе
 			if (title) review.author = author;
@@ -87,34 +86,34 @@ const reviewController = {
 			// Сохраняем обновленный объект в базе данных
 			await review.save();
 			// Отправляем ответ с объектом отзыва
-			res.json(review);
+			return res.json(review);
 		} catch (err) {
 			// Обрабатываем ошибку и отправляем статус 500
-			console.error(err);
-			res.status(500).send("Server error");
+			// console.error(err)
+			return res.status(500).send('Server error');
 		}
 	},
 	// Контроллер для удаления существующего отзыва по ID
 	delete: async (req, res) => {
 		try {
 			// Получаем ID из параметров запроса
-			const id = req.params.id;
+			const { id } = req.params;
 			// Ищем технологию по ID в базе данных
 			const review = await ReviewModel.findById(id);
 			// Проверяем, что отзыв существует
 			if (!review) {
 				// Если нет, отправляем статус 404 и сообщение
-				return res.status(404).send("Review not found");
+				return res.status(404).send('Review not found');
 			}
 			// Удаляем объект из базы данных
 			await review.remove();
 			// Отправляем ответ со статусом 204 и без тела
-			res.status(204).end();
+			return res.status(204).end();
 		} catch (err) {
 			// Обрабатываем ошибку и отправляем статус 500
-			console.error(err);
-			res.status(500).send("Server error");
+			// console.error(err)
+			return res.status(500).send('Server error');
 		}
 	},
-}
+};
 module.exports = reviewController;

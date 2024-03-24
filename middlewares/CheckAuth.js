@@ -5,33 +5,31 @@ exports.checkToken = (req, res, next) => {
 	const token = req.headers['x-access-token'];
 	if (!token) {
 		return res.status(403).json({
-			message: 'Токен не предоставлен'
+			message: 'Токен не предоставлен',
 		});
 	}
-	next();
+	return next();
 };
 
 // Middleware для проверки валидности токена и аутентификации пользователя
 exports.authenticateUser = (req, res, next) => {
-	passport.authenticate('jwt', {session: false}, (err, user, info) => {
+	passport.authenticate('jwt', { session: false }, (err, user, info) => {
 		if (err || !user) {
 			return res.status(401).json({
-				message: info ? info.message : 'Неверный токен'
+				message: info ? info.message : 'Неверный токен',
 			});
 		}
 		req.user = user;
-		next();
+		return next();
 	})(req, res, next);
 };
 
 // Middleware для проверки роли пользователя
-exports.authorizeUser = (roles) => {
-	return (req, res, next) => {
-		if (!roles.includes(req.user.role)) {
-			return res.status(403).json({
-				message: 'У вас недостаточно прав для выполнения этого действия'
-			});
-		}
-		next();
-	};
+exports.authorizeUser = (roles) => (req, res, next) => {
+	if (!roles.includes(req.user.role)) {
+		return res.status(403).json({
+			message: 'У вас недостаточно прав для выполнения этого действия',
+		});
+	}
+	return next();
 };

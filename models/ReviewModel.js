@@ -1,5 +1,5 @@
 // Подключаем mongoose
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 // Определяем схему отзывов
 const reviewSchema = new mongoose.Schema({
@@ -28,5 +28,5 @@ const reviewSchema = new mongoose.Schema({
 		default: Date.now, // Устанавливаем значение по умолчанию
 	},
 });
-const ReviewModel = mongoose.model("ReviewModel", reviewSchema);
+const ReviewModel = mongoose.model('ReviewModel', reviewSchema);
 module.exports = ReviewModel;

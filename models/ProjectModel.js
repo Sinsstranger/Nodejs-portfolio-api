@@ -1,5 +1,5 @@
 // Подключаем mongoose
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 // Определяем схему для списка проектов
 const projectSchema = new mongoose.Schema({
@@ -12,10 +12,10 @@ const projectSchema = new mongoose.Schema({
 		required: true, // Обязательное поле
 		validate: {
 			// Пользовательский валидатор для проверки формата изображения
-			validator: function (v) {
+			validator(v) {
 				return /\.(jpg|jpeg|png|gif)$/.test(v);
 			},
-			message: "Неверный формат изображения",
+			message: 'Неверный формат изображения',
 		},
 	},
 	description: {
@@ -28,16 +28,16 @@ const projectSchema = new mongoose.Schema({
 		type: String,
 		validate: {
 			// Пользовательский валидатор для проверки формата ссылки
-			validator: function (v) {
-				return /^https?:\/\/[\w-\.]+(\.[\w-]+)+\/?/.test(v);
+			validator(v) {
+				return /^https?:\/\/[\w-.]+(\.[\w-]+)+\/?/.test(v);
 			},
-			message: "Неверный формат ссылки",
+			message: 'Неверный формат ссылки',
 		},
 	},
 	category: {
 		// Поле для типа проекта
 		type: String,
-		enum: ["Web", "Mobile", "Game"], // Ограничиваем возможные значения
+		enum: ['Web', 'Mobile', 'Game'], // Ограничиваем возможные значения
 	},
 	technologies: [
 		{
@@ -48,12 +48,12 @@ const projectSchema = new mongoose.Schema({
 	status: {
 		// Поле для состояния проекта
 		type: String,
-		enum: ["Completed", "In progress", "Frozen"], // Ограничиваем возможные значения
+		enum: ['Completed', 'In progress', 'Frozen'], // Ограничиваем возможные значения
 	},
 });
 
 // Создаем модель для списка проектов на основе схемы
-const ProjectModel = mongoose.model("ProjectModel", projectSchema);
+const ProjectModel = mongoose.model('ProjectModel', projectSchema);
 
 // Экспортируем модель
 module.exports = ProjectModel;
