@@ -56,7 +56,11 @@ const UserController = {
 			// Отправка токена клиенту
 			return res.status(200).json({
 				message: 'Пользователь успешно аутентифицирован',
-				token,
+				user: {
+					id: user._id,
+					token,
+					role: user.role,
+				},
 			});
 		})(req, res);
 	},
