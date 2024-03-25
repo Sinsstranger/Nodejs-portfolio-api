@@ -50,17 +50,14 @@ const UserController = {
 				});
 			}
 			// Генерация токена
-			const token = jwt.sign({ id: user._id }, process.env.JWT_SIGN_KEY, {
+			const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SIGN_KEY, {
 				expiresIn: process.env.JWT_TOKEN_LIFETIME,
 			});
 			// Отправка токена клиенту
 			return res.status(200).json({
 				message: 'Пользователь успешно аутентифицирован',
-				user: {
-					id: user._id,
-					token,
-					role: user.role,
-				},
+				token,
+				role: user.role,
 			});
 		})(req, res);
 	},

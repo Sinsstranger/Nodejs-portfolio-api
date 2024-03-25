@@ -5,8 +5,12 @@ const JwtExtract = require('passport-jwt').ExtractJwt;
 const UserModel = require('../../models/UserModel');
 require('dotenv').config();
 
+/**
+ * Local Strategy
+ * passport.use("rename strategy", new LocalStrategy({ ... }, cb));
+ */
+
 passport.use(
-	'local',
 	new LocalStrategy({ usernameField: 'email' }, async (email, password, cb) => {
 		try {
 			const user = await UserModel.findOne({ email });
@@ -25,7 +29,9 @@ passport.use(
 		} catch (err) {
 			return cb(err);
 		}
-	}),
+	})
+);
+passport.use(
 	new JwtStrategy(
 		{
 			jwtFromRequest: JwtExtract.fromAuthHeaderAsBearerToken(),
@@ -47,10 +53,12 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
+	console.log("Serialize", user);
 	done(null, user);
 });
 
 passport.deserializeUser((user, done) => {
+	console.log("DeSerialize", user);
 	done(null, user);
 });
 

@@ -4,6 +4,6 @@ const config = {
 	semi: false,
 	singleQuote: true,
 	useTabs: true,
-}
+};
 
-module.exports = config
+module.exports = config;

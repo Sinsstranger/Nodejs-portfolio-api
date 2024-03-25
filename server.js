@@ -17,12 +17,12 @@ app.use(
 	require('express-session')({
 		secret: 'sd4535',
 		resave: true,
-		saveUninitialized: true,
+		saveUninitialized: false,
 	})
 );
 
-app.use(passport.session({}));
 app.use(passport.initialize({}));
+app.use(passport.session({}));
 
 app.set('view engine', 'ejs');
 app.set('view cache', false);
@@ -38,6 +38,9 @@ app.get('/', (req, res) => {
 	res.render('pages/index');
 });
 app.get('/login', (req, res) => {
+	if(req.isAuthenticated()){
+		res.redirect('/');
+	}
 	res.render('pages/login');
 });
 const run = async () => {
