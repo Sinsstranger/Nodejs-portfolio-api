@@ -3,32 +3,35 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const { join } = require('path');
+const session = require('express-session');
+
 const stackRoutes = require('./routes/stackRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const reviewsRoutes = require('./routes/reviewsRoutes');
 const authRoutes = require('./routes/AuthRoutes');
 const passport = require('./config/passport/passport');
+
 require('dotenv').config();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(express.static('views'));
 app.use(
-	require('express-session')({
+	session({
 		secret: 'sd4535',
 		resave: true,
 		saveUninitialized: false,
 	})
 );
 
-app.use(passport.initialize({}));
 app.use(passport.session({}));
+app.use(passport.initialize({}));
 
 app.set('view engine', 'ejs');
 app.set('view cache', false);
 app.set('views', join(__dirname, './views'));
-app.use(express.static('views'));
-app.use(express.urlencoded({ extended: true }));
+
 app.use('/api/stack', stackRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/reviews', reviewsRoutes);
@@ -38,10 +41,10 @@ app.get('/', (req, res) => {
 	res.render('pages/index');
 });
 app.get('/login', (req, res) => {
-	if(req.isAuthenticated()){
-		res.redirect('/');
+	if (req.isAuthenticated()) {
+		return res.redirect('/');
 	}
-	res.render('pages/login');
+	return res.render('pages/login');
 });
 const run = async () => {
 	try {

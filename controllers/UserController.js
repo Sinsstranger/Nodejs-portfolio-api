@@ -42,24 +42,36 @@ const UserController = {
 		}
 	},
 	// Аутентификация пользователя и генерация токена
-	loginUser: async (req, res) => {
-		passport.authenticate('local', { session: false }, (err, user, info) => {
+	loginUser: (req, res, next) => {
+		passport.authenticate('local', { session: true }, async (err, user, info) => {
+			if (err) {
+				return next(err);
+			}
 			if (err || !user) {
 				return res.status(401).json({
 					message: info ? info.message : 'Неверный логин или пароль',
 				});
 			}
-			// Генерация токена
-			const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SIGN_KEY, {
-				expiresIn: process.env.JWT_TOKEN_LIFETIME,
+
+			return req.logIn(user, (error) => {
+				if (err) {
+					return next(error);
+				}
+
+				// console.log(req.session.passport.user);
+
+				// Генерация токена
+				const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SIGN_KEY, {
+					expiresIn: process.env.JWT_TOKEN_LIFETIME,
+				});
+				// Отправка токена клиенту
+				return res.status(200).json({
+					message: 'Пользователь успешно аутентифицирован',
+					token,
+					role: user.role,
+				});
 			});
-			// Отправка токена клиенту
-			return res.status(200).json({
-				message: 'Пользователь успешно аутентифицирован',
-				token,
-				role: user.role,
-			});
-		})(req, res);
+		})(req, res, next);
 	},
 	// Получение информации о текущем пользователе по токену
 	getUserInfo: async (req, res) => {
